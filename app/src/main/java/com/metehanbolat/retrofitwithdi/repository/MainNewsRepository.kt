@@ -3,10 +3,9 @@ package com.metehanbolat.retrofitwithdi.repository
 import com.metehanbolat.retrofitwithdi.model.NewsModel
 import com.metehanbolat.retrofitwithdi.retrofit.NewsAPI
 import com.metehanbolat.retrofitwithdi.util.Resource
+import kotlinx.coroutines.delay
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class MainNewsRepository @Inject constructor(
     private val newsAPI: NewsAPI
 ): NewsRepository {
