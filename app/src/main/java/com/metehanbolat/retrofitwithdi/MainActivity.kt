@@ -1,10 +1,15 @@
 package com.metehanbolat.retrofitwithdi
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.perf.FirebasePerformance
+import com.google.firebase.perf.ktx.performance
+import com.google.firebase.perf.metrics.Trace
 import com.metehanbolat.retrofitwithdi.databinding.ActivityMainBinding
 import com.metehanbolat.retrofitwithdi.model.Article
 import com.metehanbolat.retrofitwithdi.model.NewsModel
@@ -23,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private var newsList = emptyList<Article>()
 
+    private lateinit var trace: Trace
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -30,12 +37,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        trace = Firebase.performance.newTrace("get_news_trace")
 
         viewModel.viewModelScope.launch(Dispatchers.IO) {
+            trace.start()
+            delay(2000L)
             newsList = viewModel.getNews().data!!.articles
             withContext(Dispatchers.Main) {
-                delay(1000L)
                 binding.text.text = newsList[5].content
+                trace.stop()
+            }
+        }
+
+        binding.button.setOnClickListener {
+            Intent(baseContext, DetailActivity::class.java).apply {
+                startActivity(this)
             }
         }
 
@@ -49,4 +65,5 @@ class MainActivity : AppCompatActivity() {
         }.start()
 
     }
+
 }

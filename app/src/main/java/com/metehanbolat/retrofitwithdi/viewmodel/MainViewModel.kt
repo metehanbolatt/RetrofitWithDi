@@ -12,4 +12,5 @@ class MainViewModel @Inject constructor(private val newsRepository: MainNewsRepo
 
     suspend fun getNews(): Resource<NewsModel> = newsRepository.getNewAllNews()
 
+
 }
