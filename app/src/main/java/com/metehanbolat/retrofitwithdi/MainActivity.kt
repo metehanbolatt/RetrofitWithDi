@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             newsList = viewModel.getNews().data!!.articles
             withContext(Dispatchers.Main) {
                 delay(1000L)
-                binding.text.text = newsList[1].content
+                binding.text.text = newsList[5].content
             }
         }
 
